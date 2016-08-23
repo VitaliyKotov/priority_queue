@@ -14,13 +14,9 @@ class Node {
 			return;
 		}
 		
-		if(this.left) {
+		if(!this.right) {
 			this.right = node;
 			node.parent = this;
-			return;
-		}
-
-		if(this.left && this.right) {
 			return;
 		}
 	}
@@ -67,25 +63,41 @@ class Node {
 		if(this.parent) {
 			if(this.parent.left == this) {
 				this.parent.parent = this;
-				this.parent = parentOfParent;
-				this.parent.right.parent = this;
-				this.right = this.parent.right;
+				
+				if(this.parent.right) { 
+					this.parent.right.parent = this;
+					this.right = this.parent.right;
+				}
+
+				if(leftChild) {
 				leftChild.parent = this.parent;
 				this.parent.left = leftChild;
-				rightChild.parent = this.parent;
-				this.parent.right = rightChild;
+				}
+
+				if(rightChild) {
+					rightChild.parent = this.parent;
+					this.parent.right = rightChild;
+				}
 				this.left = this.parent;
+				this.parent = parentOfParent;
 				
 			} else {
 				this.parent.parent = this;
-				this.parent = parentOfParent;
-				this.parent.left.parent = this;
-				this.left = this.parent.left;
-				leftChild.parent = this.parent;
-				this.parent.left = leftChild;
-				rightChild.parent = this.parent;
-				this.parent.right = rightChild;
+				
+				if(this.parent.left) {
+					this.parent.left.parent = this;
+					this.left = this.parent.left;
+				}
+				if(leftChild) {
+					leftChild.parent = this.parent;
+					this.parent.left = leftChild;
+				}
+				if(rightChild) {
+					rightChild.parent = this.parent;
+					this.parent.right = rightChild;
+				}
 				this.right = this.parent;
+				this.parent = parentOfParent;
 			}
 		}
 	}
