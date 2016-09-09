@@ -16,6 +16,15 @@ class MaxHeap {
 	}
 
 	detachRoot() {
+
+		let detachedRoot = this.root;
+		
+		if(this.parentNodes[0] == detachedRoot) {
+			this.parentNodes.shift();
+		}
+
+		this.root = null;
+		return detachedRoot;
 		
 	}
 
@@ -51,30 +60,57 @@ class MaxHeap {
         	this.parentNodes.push(node);
         	this.parentNodes.shift();
 		}
+		
 	}
 
 	shiftNodeUp(node) {
-		let n = this.parentNodes.indexOf(node); // index of selected node in array
-		let shifted = this.parentNodes[n]; //save the selected node 
-		while(n > 0) { 
-			let parentIndex = Math.floor((n+1)/2)- 1,
-				parent = this.parentNodes[parentIndex];
 
-				if(shifted.priority > parent.priority) { 
-					shifted.swapWithParent();
-					// this.parentNodes[parentIndex] = shifted; // swap the elements if the parent is greater.
-					// this.parentNodes[n] = parent;
-					n = parentIndex; //update `n` to continue at the new position.
-				} else {
-					break; //if parent less, no need to swap
-				}
-				return this;
+		let parent = node.parent;
+		let nodeIndex = this.parentNodes.indexOf(node);
+		let parentIndex = this.parentNodes.indexOf(parent);
+		if(parent && parent.priority < node.priority) {
+			this.parentNodes[parentIndex] = node;
+			this.parentNodes[nodeIndex] = parent;
+			node.swapWithParent();
+			this.shiftNodeUp(node);
+		} else {
+			this.root = node;
 		}
+			
 	}
 
 	shiftNodeDown(node) {
-		
+		if (node === null || node.left === null) {
+			return;
+		}
+
+		if (node.left) {
+			var childToShift = node.left;
+			if (node.right && childToShift.priority <= node.right.priority) { // check if node has right child and if its priority greater than left's child
+				childToShift = node.right; // if so we will move right, to ensure greater priority to be higher
+			}
+			if (childToShift.priority > node.priority) {
+				let childToShiftIndex = this.parentNodes.indexOf(childToShift);
+				let nodeIndex = this.parentNodes.indexOf(node);
+				if (node === this.root) {
+					this.root = childToShift;
+				}
+				if (nodeIndex === -1) {
+					this.parentNodes[childToShiftIndex] = node;
+				} else {
+					this.parentNodes[nodeIndex] = childToShift;
+					this.parentNodes[childToShiftIndex] = node;
+				}
+				childToShift.swapWithParent();
+				this.shiftNodeDown(node);
+
+			}
+
+		}
+
 	}
+
 }
+		
 
 module.exports = MaxHeap;
