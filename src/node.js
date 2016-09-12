@@ -72,12 +72,17 @@ class Node {
 				if(leftChild) {
 				leftChild.parent = this.parent;
 				this.parent.left = leftChild;
+				} else {
+					this.parent.left = null;
 				}
 
 				if(rightChild) {
 					rightChild.parent = this.parent;
 					this.parent.right = rightChild;
+				} else {
+					this.parent.right = null; 
 				}
+
 				this.left = this.parent;
 				this.parent = parentOfParent;
 				
@@ -91,11 +96,17 @@ class Node {
 				if(leftChild) {
 					leftChild.parent = this.parent;
 					this.parent.left = leftChild;
+				} else {
+					this.parent.left = null;
 				}
+
 				if(rightChild) {
 					rightChild.parent = this.parent;
 					this.parent.right = rightChild;
+				} else {
+					this.parent.right = null; 
 				}
+				
 				this.right = this.parent;
 				this.parent = parentOfParent;
 			}
